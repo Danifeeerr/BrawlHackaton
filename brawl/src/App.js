@@ -27,23 +27,18 @@ function CSVReader() {
 
   return (
     <div>
-      <h1>CSV Data</h1>
-      <ul>
+      <h1>Images and Names from CSV</h1>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {data.map((row, index) => (
-          <li key={index}>
-            {Object.keys(row).map((key, index) => (
-              <span key={index}>
-                <strong>{key}: </strong> {row[key]}
-                <br />
-              </span>
-            ))}
-          </li>
+          <div key={row.name} style={{ margin: '10px', textAlign: 'center' }}>
+            <p>{row.name}</p>
+            <img src={row.image} alt={`Image ${row[name]}`} style={{ width: '200px', height: '200px', objectFit: 'cover' }} />
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
-
 
 
 function App() {
@@ -56,6 +51,7 @@ function App() {
        </div>
       </header>
       <body className="App-body">
+        
         <CSVReader></CSVReader>
       </body>
 
