@@ -1,30 +1,64 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
 
-const people = [
-  'Creola Katherine Johnson: mathematician',
-  'Mario José Molina-Pasquel Henríquez: chemist',
-  'Mohammad Abdus Salam: physicist',
-  'Percy Lavon Julian: chemist',
-  'Subrahmanyan Chandrasekhar: astrophysicist'
-];
+function CSVReader() {
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('/data.csv');
+      const text = await response.text();
+      const rows = text.split('\n').map(row => row.split(','));
+      // Assuming the first row contains headers
+      const headers = rows[0];
+      const rowsData = rows.slice(1);
+      const formattedData = rowsData.map(row => {
+        return headers.reduce((obj, header, index) => {
+          obj[header] = row[index];
+          return obj;
+        }, {});
+      });
+      setData(formattedData);
+    };
 
-function List() {
-  const listItems = people.map(person =>
-    <li>{person}</li>
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <h1>CSV Data</h1>
+      <ul>
+        {data.map((row, index) => (
+          <li key={index}>
+            {Object.keys(row).map((key, index) => (
+              <span key={index}>
+                <strong>{key}: </strong> {row[key]}
+                <br />
+              </span>
+            ))}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
-  return <ul>{listItems}</ul>;
 }
+
 
 
 function App() {
   return (
     <div className="App">
+
       <header className="App-header">
-       <h1>Brawl Assistant</h1>
-       <List/>
+      <div>
+        <img src={require('../src/images/title.png')} alt="Title" />
+       </div>
       </header>
+      <body className="App-body">
+        <CSVReader></CSVReader>
+      </body>
+
     </div>
 
   );
